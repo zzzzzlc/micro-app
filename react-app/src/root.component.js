@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from "react-dom";
+import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 
 const Root = () => {
@@ -13,11 +13,11 @@ const Root = () => {
 
 const lifecycles = singleSpaReact({
   React,
-  ReactDOM,
+  ReactDOMClient,
   rootComponent: Root,
   errorBoundary(err, info, props) {
     return <div>Error: {err.message}</div>;
-  }
+  },
 });
 
 export const { bootstrap, mount, unmount } = lifecycles;
