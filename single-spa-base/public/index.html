@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>微前端架构 - 根配置</title>
+  <script src="/system.js"></script>
+  <script type="systemjs-importmap">
+    {
+      "imports": {
+        "@org/root-config": "http://localhost:8081/root-config.js",
+        "react_app_1": "http://localhost:8082/react_app_1.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <a href="/app1">react_app_1</a>
+  <script>
+    System.import('@org/root-config').catch((err) => {
+      console.error('Error loading root config:', err);
+    });
+  </script>
+</body>
+</html>
