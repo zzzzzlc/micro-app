@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 
-const Root = () => {
+const Root = (props) => {
+  console.log('子应用接收到的props:', props);
   return (
     <div style={{ padding: '20px', background: '#f0f0f0' }}>
       <h1>React App 1</h1>

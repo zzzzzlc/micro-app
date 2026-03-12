@@ -8,10 +8,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'react_app_1.js',
     libraryTarget: 'system',  // 输出为 SystemJS 模块
-    // library: {
-    //     name: 'ReactApp1',  // 全局变量名
-    //     type: 'umd'         // UMD 格式
-    // },
     publicPath: 'http://localhost:8082/',
   },
   module: {

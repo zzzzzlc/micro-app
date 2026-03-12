@@ -8,14 +8,13 @@
   <script type="systemjs-importmap">
     {
       "imports": {
-        "@org/root-config": "http://localhost:8081/root-config.js",
-        "react_app_1": "http://localhost:8082/react_app_1.js"
+        "@org/root-config": "http://localhost:8081/root-config.js"
       }
     }
   </script>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">base</div>
   <a href="/app1">react_app_1</a>
   <script>
     System.import('@org/root-config').catch((err) => {
