@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Typography } from 'antd';
+import { Layout, Menu, Typography, Tag } from 'antd';
 import 'antd/dist/reset.css';
 
 const { Header, Sider, Content } = Layout;
