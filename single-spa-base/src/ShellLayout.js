@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Tag, Typography } from 'antd';
+import { Layout, Menu, Typography } from 'antd';
 import 'antd/dist/reset.css';
 
 const { Header, Sider, Content } = Layout;
@@ -80,7 +80,7 @@ export function ShellLayout() {
             子应用
           </Text>
           <Menu
-            mode="inline"
+            // mode="inline"
             defaultSelectedKeys={['app1']}
             items={navItems.map((item) => ({
               key: item.key,
@@ -144,13 +144,7 @@ export function ShellLayout() {
             >
               微前端基座
             </div>
-            <div style={{ fontSize: 12, color: '#9ca3af' }}>
-              负责调度各个子应用，自己不承载业务
-            </div>
           </div>
-          <Tag color="blue" bordered={false}>
-            Shell running on 8081
-          </Tag>
         </Header>
 
         <Content

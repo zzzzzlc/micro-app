@@ -12,29 +12,34 @@ module.exports = {
         libraryTarget: 'system',
         publicPath: '/',
     },
-     module: {
+    module: {
         rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: ['@babel/preset-env', '@babel/preset-react'],
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
+                    },
                 },
             },
-        },]
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
+            },
+        ],
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html',
             filename: 'index.html',
             inject: false
-          }),
-          new CopyWebpackPlugin({
+        }),
+        new CopyWebpackPlugin({
             patterns: [
-              { from: 'node_modules/systemjs/dist/system.js', to: 'system.js' }
+                { from: 'node_modules/systemjs/dist/system.js', to: 'system.js' }
             ]
-          })
+        })
         // new ContainerPlugin({
         //     name: 'root',
         //     filename: 'remote-entry.js',
@@ -46,7 +51,7 @@ module.exports = {
         //     }
         // }),
     ],
-    devServer:{
+    devServer: {
         port: 8081,
         headers: {
             'Access-Control-Allow-Origin': '*',
