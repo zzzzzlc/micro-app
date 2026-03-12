@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>微前端架构 - 根配置</title>
-  <script src="/system.js"></script>
-  <script type="systemjs-importmap">
-    {
-      "imports": {
-        "@org/root-config": "http://localhost:8081/root-config.js"
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微前端架构 - 根配置</title>
+    <script src="/system.js"></script>
+    <script type="systemjs-importmap">
+        { "imports": { "@org/root-config": "http://localhost:8081/root-config.js" } }
+    </script>
 </head>
+
 <body>
-  <div id="app">base</div>
-  <a href="/app1">react_app_1</a>
-  <script>
-    System.import('@org/root-config').catch((err) => {
-      console.error('Error loading root config:', err);
-    });
-  </script>
+    <div id="root"></div>
+    <script>
+        System.import('@org/root-config').catch((err) => {
+            console.error('Error loading root config:', err);
+        });
+    </script>
 </body>
+
 </html>
