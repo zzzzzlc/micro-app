@@ -4,11 +4,14 @@ import App from './App.vue';
 
 const vueLifecycles = singleSpaVue({
   Vue,
-  appOptions: (opts, props) => {
+  // 注意：single-spa-vue 在运行时只会传入一个参数（singleSpaProps）
+  appOptions: (singleSpaProps) => {
+    const props = singleSpaProps || {};
+
     const domElement =
-      props && props.domElement
+      props.domElement
         ? props.domElement
-        : props && typeof props.domElementGetter === 'function'
+        : typeof props.domElementGetter === 'function'
           ? props.domElementGetter(props)
           : document.getElementById('app');
 
