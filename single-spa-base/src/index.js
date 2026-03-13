@@ -13,12 +13,12 @@ if (container) {
 
 // 注册子应用
 config.forEach((item) => {
-    registerApplication({
-        name: item.name,
-        app: () => System.import(item.href),
-        activeWhen: item.activeWhen,
-        customProps: {...(item.customProps || {}) },
-    });
+  registerApplication({
+    name: item.name,
+    app: () => System.import(item.href),
+    activeWhen: item.activeWhen,
+    customProps: { ...(item.customProps || {}) },
+  });
 });
 
 start();

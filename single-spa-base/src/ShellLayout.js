@@ -1,6 +1,7 @@
 import React from 'react';
-import { Layout, Menu, Typography, Tag } from 'antd';
+import { Layout, Menu, Tag, Typography } from 'antd';
 import 'antd/dist/reset.css';
+import { navigateTo } from './shared-app-context';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -8,17 +9,22 @@ const { Text } = Typography;
 const navItems = [
   {
     key: 'app1',
-    label: <a href="/app1">React App 1</a>,
+    label: "React App 1",
     description: '/app1 · SystemJS',
   },
   {
     key: 'app2',
-    label: <a href="/app2">Vue App 1</a>,
+    label: "vue App 2 (预留)",
     description: '/app2 · 预留',
   },
 ];
 
 export function ShellLayout() {
+  const [selectedKeys, setSelectedKeys] = React.useState(['app1']);
+  const handleMenuClick = (e) => {
+    setSelectedKeys([e.key]);
+    navigateTo(`/${e.key}`);
+  }
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -80,8 +86,9 @@ export function ShellLayout() {
             子应用
           </Text>
           <Menu
-            // mode="inline"
             defaultSelectedKeys={['app1']}
+            selectedKeys={selectedKeys}
+            onClick={handleMenuClick}
             items={navItems.map((item) => ({
               key: item.key,
               label: (
@@ -144,7 +151,13 @@ export function ShellLayout() {
             >
               微前端基座
             </div>
+            <div style={{ fontSize: 12, color: '#9ca3af' }}>
+              负责调度各个子应用，自己不承载业务
+            </div>
           </div>
+          <Tag color="blue" bordered={false}>
+            Shell running on 8081
+          </Tag>
         </Header>
 
         <Content
