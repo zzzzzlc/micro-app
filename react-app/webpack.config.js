@@ -8,7 +8,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'react_app_1.js',
     libraryTarget: 'system',  // 输出为 SystemJS 模块
-    publicPath: 'http://localhost:8082/',
+    // 远程基座通过 IP/域名加载本地子应用时，避免资源仍指向 localhost
+    publicPath: 'auto',
   },
   module: {
     rules: [
@@ -33,6 +34,8 @@ module.exports = {
   ],
   devServer: {
     port: 8082,
+    host: '0.0.0.0',
+    allowedHosts: 'all',
     headers: {
       'Access-Control-Allow-Origin': '*',
        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',

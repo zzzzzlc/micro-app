@@ -9,7 +9,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'vue_app_1.js',
     libraryTarget: 'system',
-    publicPath: 'http://localhost:8083/',
+    // 远程基座通过 IP/域名加载本地子应用时，避免资源仍指向 localhost
+    publicPath: 'auto',
   },
   module: {
     rules: [
@@ -49,6 +50,8 @@ module.exports = {
   ],
   devServer: {
     port: 8083,
+    host: '0.0.0.0',
+    allowedHosts: 'all',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',

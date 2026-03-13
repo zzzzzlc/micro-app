@@ -53,6 +53,8 @@ const lifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: Root,
+  // 挂载容器优先使用基座通过 customProps 传入的 domElement/domElementGetter
+  // 若未传入，则回退到基座默认的 #app
   domElementGetter() {
     return document.getElementById('app');
   },

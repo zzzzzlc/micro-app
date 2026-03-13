@@ -1,7 +1,9 @@
 import React from 'react';
-import { Layout, Menu, Tag, Typography } from 'antd';
+import { Layout, Menu, Tag, Tabs, Typography } from 'antd';
 import 'antd/dist/reset.css';
 import { navigateTo } from './shared-app-context';
+import { setActiveOutletId } from './tab-outlets';
+import { unloadApplication } from 'single-spa';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -21,10 +23,66 @@ const navItems = [
 
 export function ShellLayout() {
   const [selectedKeys, setSelectedKeys] = React.useState(['app1']);
+  const [tabs, setTabs] = React.useState([]);
+  const [activeTabKey, setActiveTabKey] = React.useState('');
+
+  const tabKeyFromPath = (pathname) => pathname || '/';
+  const appNameFromPath = (pathname) => {
+    if ((pathname || '').startsWith('/app1')) return 'react_app_1';
+    if ((pathname || '').startsWith('/app2')) return 'vue_app_1';
+    return null;
+  };
+
+  const ensureTabForPath = React.useCallback((pathname) => {
+    const key = tabKeyFromPath(pathname);
+    const appName = appNameFromPath(pathname);
+    if (!appName) return;
+
+    const outletId = `outlet:${key}`;
+    setTabs((prev) => {
+      if (prev.some((t) => t.key === key)) return prev;
+      return [
+        ...prev,
+        {
+          key,
+          label: key,
+          appName,
+          outletId,
+        },
+      ];
+    });
+    setActiveTabKey(key);
+    setActiveOutletId(appName, outletId);
+  }, []);
+
+  React.useEffect(() => {
+    ensureTabForPath(window.location.pathname);
+    const handler = () => ensureTabForPath(window.location.pathname);
+    window.addEventListener('popstate', handler);
+    return () => window.removeEventListener('popstate', handler);
+  }, [ensureTabForPath]);
   const handleMenuClick = (e) => {
     setSelectedKeys([e.key]);
     navigateTo(`/${e.key}`);
   }
+
+  const onTabChange = async (key) => {
+    setActiveTabKey(key);
+    const tab = tabs.find((t) => t.key === key);
+    if (!tab) return;
+
+    // 切换 tab 时，确保该 app 的挂载容器指向这个 tab 的 outlet
+    setActiveOutletId(tab.appName, tab.outletId);
+
+    // 同一个应用在不同子路由 tab 之间切换时，主动卸载以触发重新挂载到新容器
+    try {
+      await unloadApplication(tab.appName, { waitForUnmount: true });
+    } catch (e) {
+      // ignore
+    }
+
+    navigateTo(key);
+  };
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -151,9 +209,6 @@ export function ShellLayout() {
             >
               微前端基座
             </div>
-            <div style={{ fontSize: 12, color: '#9ca3af' }}>
-              负责调度各个子应用，自己不承载业务
-            </div>
           </div>
           <Tag color="blue" bordered={false}>
             Shell running on 8081
@@ -177,50 +232,50 @@ export function ShellLayout() {
                 'radial-gradient(circle at top left, rgba(37,99,235,0.25), rgba(15,23,42,0.98))',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 8,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: '#e5e7eb',
-                }}
-              >
-                子应用挂载区域
-              </Text>
-              <Tag
-                color="geekblue"
-                style={{ borderRadius: 999, fontSize: 11 }}
-              >
-                single-spa application outlet
-              </Tag>
-            </div>
             <div style={{ fontSize: 12, color: '#9ca3af' }}>
               当路由匹配到 <code>/app1</code>、<code>/app2</code> 等前缀时，
               对应子应用会被挂载到下方容器中。
             </div>
           </div>
 
-          <div
-            id="app"
-            style={{
-              borderRadius: 12,
-              border: '1px dashed #4b5563',
-              background: '#020617',
-              minHeight: 180,
-              padding: 12,
-              color: '#9ca3af',
-              fontSize: 12,
+          <Tabs
+            size="small"
+            type="editable-card"
+            hideAdd
+            activeKey={activeTabKey || (tabs[0] && tabs[0].key) || ''}
+            onChange={onTabChange}
+            onEdit={(targetKey, action) => {
+              if (action !== 'remove') return;
+              const key = String(targetKey);
+              setTabs((prev) => prev.filter((t) => t.key !== key));
+              if (activeTabKey === key) {
+                const next = tabs.find((t) => t.key !== key);
+                if (next) onTabChange(next.key);
+              }
             }}
-          >
-            {/* 子应用会在此区域挂载 */}
-          </div>
+            items={tabs.map((t) => ({
+              key: t.key,
+              label: t.label,
+              children: (
+                <div
+                  style={{
+                    borderRadius: 12,
+                    border: '1px dashed #4b5563',
+                    background: '#020617',
+                    minHeight: 180,
+                    padding: 12,
+                    color: '#9ca3af',
+                    fontSize: 12,
+                  }}
+                >
+                  <div id={t.outletId} />
+                </div>
+              ),
+            }))}
+          />
+
+          {/* 兼容：仍保留默认容器，未开启 tabs 时使用 */}
+          <div id="app" style={{ display: 'none' }} />
         </Content>
       </Layout>
     </Layout>
