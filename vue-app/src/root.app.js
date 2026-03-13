@@ -14,9 +14,7 @@ const vueLifecycles = singleSpaVue({
         },
       });
     },
-  },
-  domElementGetter() {
-    return document.getElementById('app');
+    el: '#app',
   },
 });
 

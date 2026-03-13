@@ -17,12 +17,14 @@ const Root = (props) => {
   }, [globalState]);
 
   const updateTheme = () => {
+    console.log('updateTheme', globalState);
     if (!globalState) return;
     const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
     globalState.setGlobalState({ theme: nextTheme });
   };
 
   const goToVueApp = () => {
+    console.log('goToVueApp', globalState);
     if (navigation) {
       navigation.navigateTo('/app2');
     }
