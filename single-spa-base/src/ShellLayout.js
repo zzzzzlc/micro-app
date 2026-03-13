@@ -10,19 +10,19 @@ const { Text } = Typography;
 
 const navItems = [
   {
-    key: 'app1',
+    key: '/app1',
     label: "React App 1",
     description: '/app1 · SystemJS',
   },
   {
-    key: 'app2',
+    key: '/app2',
     label: "vue App 2 (预留)",
     description: '/app2 · 预留',
   },
 ];
 
 export function ShellLayout() {
-  const [selectedKeys, setSelectedKeys] = React.useState(['app1']);
+  const [selectedKeys, setSelectedKeys] = React.useState([]);
   const [tabs, setTabs] = React.useState([]);
   const [activeTabKey, setActiveTabKey] = React.useState('');
 
@@ -39,6 +39,16 @@ export function ShellLayout() {
     if (!appName) return;
 
     const outletId = `outlet:${key}`;
+
+    // 关键：在路由切换触发 single-spa 挂载前，确保 outlet 容器真实存在于 DOM
+    // 否则 domElementGetter 会回退到 #app，而 #app 若被隐藏会造成“容器里没内容”
+    const appContainer = document.getElementById('app');
+    if (appContainer && !document.getElementById(outletId)) {
+      const outlet = document.createElement('div');
+      outlet.id = outletId;
+      appContainer.appendChild(outlet);
+    }
+
     setTabs((prev) => {
       if (prev.some((t) => t.key === key)) return prev;
       return [
@@ -55,6 +65,19 @@ export function ShellLayout() {
     setActiveOutletId(appName, outletId);
   }, []);
 
+  const syncOutletVisibility = React.useCallback((nextActiveKey, nextTabs) => {
+    const activeKey = nextActiveKey || '';
+    (nextTabs || []).forEach((t) => {
+      const el = document.getElementById(t.outletId);
+      if (!el) return;
+      el.style.display = t.key === activeKey ? '' : 'none';
+    });
+  }, []);
+
+  React.useEffect(() => {
+    syncOutletVisibility(activeTabKey, tabs);
+  }, [activeTabKey, tabs, syncOutletVisibility]);
+
   React.useEffect(() => {
     ensureTabForPath(window.location.pathname);
     const handler = () => ensureTabForPath(window.location.pathname);
@@ -63,11 +86,12 @@ export function ShellLayout() {
   }, [ensureTabForPath]);
   const handleMenuClick = (e) => {
     setSelectedKeys([e.key]);
-    navigateTo(`/${e.key}`);
+    navigateTo(e.key);
   }
 
   const onTabChange = async (key) => {
     setActiveTabKey(key);
+    setSelectedKeys([key]);
     const tab = tabs.find((t) => t.key === key);
     if (!tab) return;
 
@@ -75,14 +99,30 @@ export function ShellLayout() {
     setActiveOutletId(tab.appName, tab.outletId);
 
     // 同一个应用在不同子路由 tab 之间切换时，主动卸载以触发重新挂载到新容器
-    try {
-      await unloadApplication(tab.appName, { waitForUnmount: true });
-    } catch (e) {
-      // ignore
-    }
-
+    // try {
+    //   await unloadApplication(tab.appName, { waitForUnmount: true });
+    // } catch (err) {
+    // }
     navigateTo(key);
   };
+  const onTabClose = (key) => {
+    setTabs((prev) => prev.filter((t) => t.key !== key));
+    if (activeTabKey === key) {
+      const next = tabs.find((t) => t.key !== key);
+      if (next) {
+        onTabChange(next.key);
+      } else {
+        setSelectedKeys([]);
+        navigateTo('/');
+      }
+    }
+  }
+  const onTabEdit = (targetKey, action) => {
+    if (action !== 'add') {
+      onTabClose(targetKey);
+    }
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -237,45 +277,34 @@ export function ShellLayout() {
               对应子应用会被挂载到下方容器中。
             </div>
           </div>
-
           <Tabs
             size="small"
             type="editable-card"
             hideAdd
             activeKey={activeTabKey || (tabs[0] && tabs[0].key) || ''}
             onChange={onTabChange}
-            onEdit={(targetKey, action) => {
-              if (action !== 'remove') return;
-              const key = String(targetKey);
-              setTabs((prev) => prev.filter((t) => t.key !== key));
-              if (activeTabKey === key) {
-                const next = tabs.find((t) => t.key !== key);
-                if (next) onTabChange(next.key);
-              }
-            }}
+            onEdit={onTabEdit}
             items={tabs.map((t) => ({
               key: t.key,
               label: t.label,
-              children: (
-                <div
-                  style={{
-                    borderRadius: 12,
-                    border: '1px dashed #4b5563',
-                    background: '#020617',
-                    minHeight: 180,
-                    padding: 12,
-                    color: '#9ca3af',
-                    fontSize: 12,
-                  }}
-                >
-                  <div id={t.outletId} />
-                </div>
-              ),
+              // outlet DOM 已在 #app 内创建，这里只负责 tab 展示
+              children: null,
             }))}
           />
-
-          {/* 兼容：仍保留默认容器，未开启 tabs 时使用 */}
-          <div id="app" style={{ display: 'none' }} />
+          <div
+            style={{
+              borderRadius: 12,
+              border: '1px dashed #4b5563',
+              background: '#020617',
+              minHeight: 180,
+              padding: 12,
+              color: '#9ca3af',
+              fontSize: 12,
+              marginTop: 12,
+            }}
+          >
+            <div id="app" />
+          </div>
         </Content>
       </Layout>
     </Layout>
