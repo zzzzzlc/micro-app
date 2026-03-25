@@ -9,7 +9,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'vue_app_1.js',
     libraryTarget: 'system',
-    // 远程基座通过 IP/域名加载本地子应用时，避免资源仍指向 localhost
     publicPath: 'auto',
   },
   module: {

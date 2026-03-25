@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ipconfig)",
+      "Bash(curl -s http://localhost:8081/root-config.js)",
+      "Bash(curl -s -I http://localhost:8082/react_app_1.js)"
+    ]
+  }
+}

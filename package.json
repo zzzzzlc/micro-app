@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +16,8 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.3",
     "eslint-plugin-react": "^7.37.5",
-    "globals": "^17.4.0"
+    "globals": "^17.4.0",
+    "husky": "^9.1.7"
   },
   "eslintConfig": {
     "env": {

@@ -1,0 +1,28 @@
+services:
+  single-spa-base:
+    build: ./single-spa-base
+    ports:
+      - "8081:8081"
+    networks:
+      - single-spa-network
+    restart: unless-stopped
+
+  react-app:
+    build: ./react-app
+    ports:
+      - "8082:8082"
+    networks:
+      - single-spa-network
+    restart: unless-stopped
+
+  vue-app:
+    build: ./vue-app
+    ports:
+      - "8083:8083"
+    networks:
+      - single-spa-network
+    restart: unless-stopped
+
+networks:
+  single-spa-network:
+    driver: bridge

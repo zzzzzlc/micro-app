@@ -1,0 +1,31 @@
+---
+alwaysApply: true
+description: Frontend coding standards for React + Ant Design + single-spa + Webpack.
+---
+
+# Frontend Stack Rules (React + AntD + single-spa + Webpack)
+
+## React
+- Use functional components + hooks; avoid class components.
+- Keep `useEffect` dependency arrays correct; clean up timers/subscriptions/listeners.
+- Prefer derived state via render logic; avoid duplicated sources of truth in component state.
+
+## Ant Design (AntD)
+- Use `Form` + `Form.Item` validation `rules` instead of ad-hoc validation.
+- Keep inputs controlled and call `form.validateFields()` before submit.
+- For `Modal`/`Drawer`, ensure cleanup on close (e.g., `destroyOnClose` when appropriate) to prevent stale UI/state.
+
+## single-spa microfrontends
+- Export proper lifecycles (`bootstrap`, `mount`, `unmount`) or use `single-spa-react` helpers.
+- Treat each microfrontend as self-contained: register/unregister event handlers and dispose resources in `unmount`.
+- Avoid assuming a specific base URL; use relative paths and ensure route/public paths don’t collide with the host.
+
+## Webpack
+- Ensure `output.publicPath` (or dynamic public path strategy) matches the runtime location under single-spa.
+- Avoid hardcoded environment-specific URLs inside components; centralize config.
+- Keep chunk/asset loading compatible with the host (no absolute asset paths that break outside dev).
+
+## Response quality
+- When asked to change code, reference exact files/locations and include a short “why” per fix.
+- Flag critical issues first (correctness, security, lifecycle cleanup), then improvements.
+
