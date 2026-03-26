@@ -2,15 +2,19 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
-  mode: 'development',
+  mode: isDev ? 'development' : 'production',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'vue_app_1.js',
+    filename: isDev ? 'vue_app_1.js' : 'vue_app_1.[contenthash:8].js',
     libraryTarget: 'system',
     publicPath: 'auto',
+    clean: !isDev,
   },
+  devtool: isDev ? 'eval-source-map' : 'source-map',
   module: {
     rules: [
       {
@@ -47,15 +51,17 @@ module.exports = {
       inject: false,
     }),
   ],
-  devServer: {
-    port: 8083,
-    host: '0.0.0.0',
-    allowedHosts: 'all',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+  ...(isDev ? {
+    devServer: {
+      port: 8083,
+      host: '0.0.0.0',
+      allowedHosts: 'all',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      },
     },
-  },
+  } : {}),
 };
 

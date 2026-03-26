@@ -1,16 +1,19 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   entry: './src/index.js',
-  mode: 'development',
+  mode: isDev ? 'development' : 'production',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'react_app_1.js',
-    libraryTarget: 'system',  // 输出为 SystemJS 模块
-    // 远程基座通过 IP/域名加载本地子应用时，避免资源仍指向 localhost
+    filename: isDev ? 'react_app_1.js' : 'react_app_1.[contenthash:8].js',
+    libraryTarget: 'system',
     publicPath: 'auto',
+    clean: !isDev,
   },
+  devtool: isDev ? 'eval-source-map' : 'source-map',
   module: {
     rules: [
       {
@@ -32,14 +35,16 @@ module.exports = {
       inject: false,
     }),
   ],
-  devServer: {
-    port: 8082,
-    host: '0.0.0.0',
-    allowedHosts: 'all',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+  ...(isDev ? {
+    devServer: {
+      port: 8082,
+      host: '0.0.0.0',
+      allowedHosts: 'all',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      },
     },
-  },
+  } : {}),
 };
