@@ -8,7 +8,7 @@ export function getActiveOutletElement(appName) {
   const outletId = activeOutletIdByApp.get(appName);
   if (outletId) {
     const el = document.getElementById(outletId);
-    if (el) return el;
+    if (el) {return el;}
   }
   return document.getElementById('app');
 }

@@ -24,7 +24,7 @@ function readQueryOverrides(allowedKeys) {
 
   for (const key of allowedKeys) {
     const val = params.get(key);
-    if (val) overrides[key] = val;
+    if (val) {overrides[key] = val;}
   }
 
   return overrides;
@@ -32,9 +32,9 @@ function readQueryOverrides(allowedKeys) {
 
 function isEnabled() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get('enableOverrides') === '1') return true;
-  if (params.get('clearOverrides') === '1') return true;
-  if (window.localStorage.getItem(STORAGE_KEY)) return true;
+  if (params.get('enableOverrides') === '1') {return true;}
+  if (params.get('clearOverrides') === '1') {return true;}
+  if (window.localStorage.getItem(STORAGE_KEY)) {return true;}
   return false;
 }
 
@@ -57,7 +57,7 @@ function isEnabled() {
  * - `?clearOverrides=1`
  */
 export function enableImportMapOverrides(appConfigs) {
-  if (!isEnabled()) return null;
+  if (!isEnabled()) {return null;}
 
   const keys = appConfigs.map((c) => c.name);
   const params = new URLSearchParams(window.location.search);
@@ -79,7 +79,7 @@ export function enableImportMapOverrides(appConfigs) {
   // 直接修改 config.href，让后续 System.import(item.href) 加载覆盖地址
   appConfigs.forEach((cfg) => {
     if (mergedOverrides[cfg.name]) {
-      // eslint-disable-next-line no-param-reassign
+       
       cfg.href = mergedOverrides[cfg.name];
     }
   });

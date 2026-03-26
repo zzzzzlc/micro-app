@@ -11,12 +11,12 @@ const { Text } = Typography;
 const navItems = [
   {
     key: '/app1',
-    label: "React App 1",
+    label: 'React App 1',
     description: '/app1 · SystemJS',
   },
   {
     key: '/app2',
-    label: "vue App 2 (预留)",
+    label: 'vue App 2 (预留)',
     description: '/app2 · 预留',
   },
 ];
@@ -28,15 +28,15 @@ export function ShellLayout() {
 
   const tabKeyFromPath = (pathname) => pathname || '/';
   const appNameFromPath = (pathname) => {
-    if ((pathname || '').startsWith('/app1')) return 'react_app_1';
-    if ((pathname || '').startsWith('/app2')) return 'vue_app_1';
+    if ((pathname || '').startsWith('/app1')) {return 'react_app_1';}
+    if ((pathname || '').startsWith('/app2')) {return 'vue_app_1';}
     return null;
   };
 
   const ensureTabForPath = React.useCallback((pathname) => {
     const key = tabKeyFromPath(pathname);
     const appName = appNameFromPath(pathname);
-    if (!appName) return;
+    if (!appName) {return;}
 
     const outletId = `outlet:${key}`;
 
@@ -50,7 +50,7 @@ export function ShellLayout() {
     }
 
     setTabs((prev) => {
-      if (prev.some((t) => t.key === key)) return prev;
+      if (prev.some((t) => t.key === key)) {return prev;}
       return [
         ...prev,
         {
@@ -69,7 +69,7 @@ export function ShellLayout() {
     const activeKey = nextActiveKey || '';
     (nextTabs || []).forEach((t) => {
       const el = document.getElementById(t.outletId);
-      if (!el) return;
+      if (!el) {return;}
       el.style.display = t.key === activeKey ? '' : 'none';
     });
   }, []);
@@ -87,13 +87,13 @@ export function ShellLayout() {
   const handleMenuClick = (e) => {
     setSelectedKeys([e.key]);
     navigateTo(e.key);
-  }
+  };
 
   const onTabChange = async (key) => {
     setActiveTabKey(key);
     setSelectedKeys([key]);
     const tab = tabs.find((t) => t.key === key);
-    if (!tab) return;
+    if (!tab) {return;}
 
     // 切换 tab 时，确保该 app 的挂载容器指向这个 tab 的 outlet
     setActiveOutletId(tab.appName, tab.outletId);
@@ -116,12 +116,12 @@ export function ShellLayout() {
         navigateTo('/');
       }
     }
-  }
+  };
   const onTabEdit = (targetKey, action) => {
     if (action !== 'add') {
       onTabClose(targetKey);
     }
-  }
+  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

@@ -9,7 +9,7 @@ const Root = (props) => {
   );
 
   useEffect(() => {
-    if (!globalState) return undefined;
+    if (!globalState) {return undefined;}
     const unsubscribe = globalState.subscribe((next) => {
       setState(next);
     });
@@ -18,7 +18,7 @@ const Root = (props) => {
 
   const updateTheme = () => {
     console.log('updateTheme', globalState);
-    if (!globalState) return;
+    if (!globalState) {return;}
     const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
     globalState.setGlobalState({ theme: nextTheme });
   };

@@ -19,18 +19,18 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
-      }
-    ]
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-        template: './public/index.html',
-        filename: 'index.html',
-        inject: false
-    })
+      template: './public/index.html',
+      filename: 'index.html',
+      inject: false,
+    }),
   ],
   devServer: {
     port: 8082,
@@ -38,8 +38,8 @@ module.exports = {
     allowedHosts: 'all',
     headers: {
       'Access-Control-Allow-Origin': '*',
-       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
-    }
-  }
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+    },
+  },
 };

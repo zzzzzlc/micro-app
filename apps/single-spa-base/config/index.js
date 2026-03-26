@@ -1,4 +1,4 @@
-import { pathPrefix } from '../src/activity-functions';
+import { pathPrefix } from '../../src/activity-functions';
 
 // 浏览器直接从宿主机访问，使用 localhost
 // Docker 容器间通信使用服务名

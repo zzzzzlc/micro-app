@@ -27,7 +27,7 @@ export const subscribe = (listener) => {
 
 // 全局导航：供子应用间跳转使用
 export const navigateTo = (url) => {
-  if (window.location.pathname === url) return;
+  if (window.location.pathname === url) {return;}
   window.history.pushState({}, '', url);
   window.dispatchEvent(new PopStateEvent('popstate'));
 };
