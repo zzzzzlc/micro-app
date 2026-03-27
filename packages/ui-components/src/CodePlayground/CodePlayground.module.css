@@ -1,0 +1,121 @@
+.container {
+  border: 1px solid var(--border-base);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+/* Display mode layout */
+.displayLayout {
+  display: flex;
+  height: 100%;
+}
+
+.codeSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--border-subtle);
+}
+
+.sectionTitle {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.description {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.codeWrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.copyButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-base);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.copyButton:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.previewSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-card);
+}
+
+.previewLabel {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+.previewContent {
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Editable mode layout (legacy) */
+.editorPane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  background: var(--bg-base);
+}
+
+.previewPane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  background: var(--bg-card);
+}
+
+@media (max-width: 768px) {
+  .displayLayout {
+    flex-direction: column;
+  }
+
+  .codeSection {
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+}
